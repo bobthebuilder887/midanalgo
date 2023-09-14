@@ -35,13 +35,25 @@ def gen_output(
     table: pd.DataFrame,
     matching_invoices: dict[int, list[int]],
 ) -> pd.DataFrame:
+    # Add workers to the original table
     table["Worker"] = -1
     for worker, invoices in matching_invoices.items():
         table.loc[table["Invoice Number"].isin(invoices), "Worker"] = worker
 
-    table = table[["Worker", "Name", "Invoice Number"]]
+    # Group invoice numbers by worker and type
+    output = table.groupby(
+        [
+            "Worker",
+            "Name",
+            "C_UT_CVG_Attention",
+        ]
+    )["Invoice Number"].unique()
 
-    return table
+    return output
+
+
+def save_output(output: pd.DataFrame, path: str | Path) -> None:
+    output.to_excel(path)
 
 
 def main() -> None:
@@ -51,8 +63,9 @@ def main() -> None:
     N_WORKERS = 3
 
     table = sheets.read_table(TABLE)
+
     tablebase = sheets.read_tablebase(TABLEBASE)
-    table = table[table["Name"].isin(tablebase.index.values)]  # type: ignore
+
     batches = sheets.gen_batches(sheets.process_table(table, tablebase))
     scores = sheets.get_scores(batches)
 
@@ -71,8 +84,11 @@ def main() -> None:
 
     matching_invoices = match_invoices(batches, optimal)
 
+    # Generate output for the output
     output = gen_output(table, matching_invoices)
-    output.groupby(["Worker", "Name"])["Invoice Number"].unique().to_excel(OUTPUT)
+
+    # Save to a specified excel file
+    save_output(output, OUTPUT)
 
 
 if __name__ == "__main__":
