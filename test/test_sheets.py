@@ -20,6 +20,11 @@ def test_read_tablebase() -> None:
     assert tablebase.shape == expected_shape
 
 
+def test_read_names() -> None:
+    names = sheets.read_names(TABLEBASE)
+    assert len(names) == 3
+
+
 def test_process_table() -> None:
     table = sheets.read_table(TABLE)
     tablebase = sheets.read_tablebase(TABLEBASE)
