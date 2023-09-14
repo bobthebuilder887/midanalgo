@@ -94,7 +94,8 @@ def main() -> None:
         "--output-file",
         help="Path to output file.",
         type=str,
-        required=True,
+        default="output.xlsx",
+        required=False,
     )
 
     # Parse arguments
