@@ -9,5 +9,5 @@ pip install -r requirements.txt
 
 ## Run
 ```{code-block} bash
-python midanalgo.py -t table.xlsx -b table_base.xlsx -o output.xlsx
+python main.py -t table.xlsx -b table_base.xlsx -o output.xlsx
 ```
