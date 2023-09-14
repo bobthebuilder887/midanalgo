@@ -16,15 +16,15 @@ def read_table(file_path: str | Path) -> pd.DataFrame:
 def read_tablebase(file_path: str | Path) -> pd.DataFrame:
     """Read the tablebase table"""
     tablebase = pd.read_excel(file_path, header=2, usecols="B:G", index_col=0)
+
+    if "DEFAULT" not in tablebase.index:
+        tablebase.loc["DEFAULT", :] = 12, 6, 4, 4, 2
+
     return tablebase
 
 
 def process_table(table: pd.DataFrame, tablebase: pd.DataFrame) -> pd.DataFrame:
     """Add a matching score to each invoice row"""
-
-    # TODO: review with Midan
-    # Remove tasks that don't have a score reference
-    table = table[table["Name"].isin(tablebase.index.values)]  # type: ignore
 
     group_cols = ["Name", "Workqueue", "C_UT_CVG_Attention"]
 
@@ -44,7 +44,10 @@ def process_table(table: pd.DataFrame, tablebase: pd.DataFrame) -> pd.DataFrame:
     # Add task score
 
     def find_score(row: pd.Series, tablebase: pd.DataFrame) -> int:
-        return tablebase.loc[row["Name"], row["Mod"]]
+        if row["Name"] in tablebase.index:
+            return tablebase.loc[row["Name"], row["Mod"]]
+        else:
+            return tablebase.loc["DEFAULT", row["Mod"]]
 
     table["Score"] = table.apply(find_score, axis=1, tablebase=tablebase)
     table["Mod"] = table["Mod"].replace(dict(zip(tablebase.columns, range(MOD))))
