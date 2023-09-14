@@ -28,10 +28,10 @@ def read_tablebase(file_path: str | Path) -> pd.DataFrame:
     return tablebase
 
 
-def read_names(file_path: str | Path, sheet_name="Names") -> list[str]:
+def read_names(file_path: str | Path, sheet_name="Workers") -> list[str]:
     """Read the worker names"""
     df = pd.read_excel(file_path, sheet_name=sheet_name)
-    return list(df["Names"].values)
+    return list(df["Agent"].values)
 
 
 def process_table(table: pd.DataFrame, tablebase: pd.DataFrame) -> pd.DataFrame:
