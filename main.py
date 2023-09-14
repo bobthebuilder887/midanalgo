@@ -45,7 +45,7 @@ def gen_output(
     matching_invoices: dict[str, list[int]],
 ) -> pd.Series:
     # Add workers to the original table
-    table["Worker"] = -1
+    table["Worker"] = ""
     for worker, invoices in matching_invoices.items():
         table.loc[table["Invoice Number"].isin(invoices), "Worker"] = worker
 
