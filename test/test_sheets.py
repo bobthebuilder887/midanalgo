@@ -1,31 +1,41 @@
 from pathlib import Path
 
+import pytest
+
 import sheets
 
-TABLE = Path("test") / "sample_data.xlsx"
-TABLEBASE = Path("test") / "sample_tablebase.xlsx"
+
+@pytest.fixture
+def TABLE() -> Path:
+    return Path("test") / "sample_data.xlsx"
 
 
-def test_reads_table() -> None:
+@pytest.fixture
+def TABLEBASE() -> Path:
+    return Path("test") / "sample_tablebase.xlsx"
+
+
+def test_reads_table(TABLE: Path) -> None:
     expected_shape = (119, 4)
     table = sheets.read_table(TABLE)
     # Check that the shape is as expected
     assert table.shape == expected_shape
 
 
-def test_read_tablebase() -> None:
-    expected_shape = (48, 5)
+def test_read_tablebase(TABLEBASE: Path) -> None:
+    expected_shape = (49, 5)
     tablebase = sheets.read_tablebase(TABLEBASE)
     # Check that the shape is as expected
     assert tablebase.shape == expected_shape
+    assert "DEFAULT" in tablebase.index
 
 
-def test_read_names() -> None:
+def test_read_names(TABLEBASE: Path) -> None:
     names = sheets.read_names(TABLEBASE)
-    assert len(names) == 3
+    assert len(names) == 11
 
 
-def test_process_table() -> None:
+def test_process_table(TABLE: Path, TABLEBASE: Path) -> None:
     table = sheets.read_table(TABLE)
     tablebase = sheets.read_tablebase(TABLEBASE)
     table = sheets.process_table(table, tablebase)
@@ -33,7 +43,7 @@ def test_process_table() -> None:
     assert "Score" in table.columns
 
 
-def test_gen_batches() -> None:
+def test_gen_batches(TABLE: Path, TABLEBASE: Path) -> None:
     table = sheets.read_table(TABLE)
     tablebase = sheets.read_tablebase(TABLEBASE)
     MOD = tablebase.shape[1]
@@ -45,7 +55,7 @@ def test_gen_batches() -> None:
     assert (len(batch.invoice_numbers) <= MOD for batch in batches.values())
 
 
-def test_get_scores() -> None:
+def test_get_scores(TABLE: Path, TABLEBASE: Path) -> None:
     table = sheets.read_table(TABLE)
     tablebase = sheets.read_tablebase(TABLEBASE)
     batches = sheets.gen_batches(sheets.process_table(table, tablebase))
