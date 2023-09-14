@@ -101,11 +101,6 @@ def main() -> None:
     # Parse arguments
     args = parser.parse_args()
 
-    # TABLE = Path("test") / "sample_data.xlsx"
-    # TABLEBASE = Path("test") / "sample_tablebase.xlsx"
-    # OUTPUT = Path("test") / "output.xlsx"
-    # N_WORKERS = 3
-
     table = sheets.read_table(args.table)
 
     tablebase = sheets.read_tablebase(args.table_base)
@@ -124,7 +119,6 @@ def main() -> None:
     optimal_avg = np.mean(optimal_scores)
     optimal_var = np.var(optimal_scores)
 
-    print(f"Expected AVG: {expected_avg}")
     print(f"Obtained AVG: {optimal_avg}")
     print(f"Obtained VAR: {optimal_var}")
     print(f"Obtained SCORES: {optimal_scores}")
