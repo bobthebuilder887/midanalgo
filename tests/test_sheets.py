@@ -7,12 +7,12 @@ import sheets
 
 @pytest.fixture
 def TABLE() -> Path:
-    return Path("test") / "sample_data.xlsx"
+    return Path("tests") / "sample_data.xlsx"
 
 
 @pytest.fixture
 def TABLEBASE() -> Path:
-    return Path("test") / "sample_tablebase.xlsx"
+    return Path("tests") / "sample_tablebase.xlsx"
 
 
 def test_reads_table(TABLE: Path) -> None:
