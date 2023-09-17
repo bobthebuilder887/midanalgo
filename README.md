@@ -9,5 +9,5 @@ pip install -e .
 
 ## Run
 ```{code-block} bash
-python divide_work -t tests/sample_data.xlsx -b tests/sample_tablebase.xlsx -o output.xlsx
+divide_work -t tests/sample_data.xlsx -b tests/sample_tablebase.xlsx -o output.xlsx
 ```
