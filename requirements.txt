@@ -1,2 +1,3 @@
-pandas==2.1.0
 openpyxl==3.0.10
+pandas==2.1.0
+numberpartitioning==0.0.2
