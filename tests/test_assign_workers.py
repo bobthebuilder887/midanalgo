@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-import assign_workers
+from work_divider import assign_workers
 
 
 @pytest.fixture

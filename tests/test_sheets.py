@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-import sheets
+from work_divider import sheets
 
 
 @pytest.fixture

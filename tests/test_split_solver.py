@@ -1,6 +1,6 @@
 import pytest
 
-import split_solver
+from work_divider import split_solver
 
 
 @pytest.fixture
