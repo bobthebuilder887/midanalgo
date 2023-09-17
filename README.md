@@ -9,5 +9,5 @@ pip install -r requirements.txt
 
 ## Run
 ```{code-block} bash
-python main.py -t table.xlsx -b table_base.xlsx -o output.xlsx
+python assign_workers.py -t table.xlsx -b table_base.xlsx -o output.xlsx
 ```
