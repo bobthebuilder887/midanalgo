@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from work_divider import sheets, split_solver
+from work_divider import batching, sheets, split_solver
 
 
 def read_data(
@@ -18,36 +18,22 @@ def read_data(
     return table, tablebase, names
 
 
-def find_matching_invoices(
-    score: int,
-    batches: dict[int, sheets.Batch],
-) -> tuple[dict[int, sheets.Batch], list[int]]:
-    """Find a batch of invoices that matches the score"""
-    for batch_id, batch in batches.copy().items():
-        if batch.score == score:
-            batches.pop(batch_id)
-            return batches, batch.invoice_numbers
-    return batches, []
-
-
 def match_invoices(
-    batches: dict[int, sheets.Batch], optimal: list[list[int]], names: list[str]
-) -> dict[str, list[int]]:
-    """Match scores with corresponding invoice numbers and assign a random name"""
-
-    # Randomly assign name to each batch of invoices
-    random.shuffle(names)
+    batches: dict[int, batching.Batch],
+    optimal: list[list[int]],
+) -> dict[int, list[int]]:
+    """Match scores with corresponding invoice numbers"""
 
     # Initialize a dictionary of workers to store invoice numbers
-    invoice_per_worker = {name: [] for name in names}
+    invoice_per_worker = {i: [] for i in range(len(optimal))}
 
     # Match invoices using batch scores
-    for name, scores in zip(names, optimal):
+    for i, scores in invoice_per_worker.items():
         for score in scores:
             # Find a invoice batch that matches the score (deletes batch, once found)
-            batches, invoices = find_matching_invoices(score, batches)
+            batches, invoices = batching.find_matching_invoices(score, batches)
             # Assign the invoice batch to the worker
-            invoice_per_worker[name].extend(invoices)
+            invoice_per_worker[i].extend(invoices)
 
     return invoice_per_worker
 
@@ -83,15 +69,20 @@ def gen_work_division_table(
     n_workers = len(names)
 
     # Assign work score to each invoice and batch by type
-    batches = sheets.gen_batches(sheets.process_table(table, tablebase))
+    batches = batching.gen_batches(batching.process_table(table, tablebase))
     # Get batch scores
-    scores = sheets.get_scores(batches)
+    scores = batching.get_scores(batches)
 
     # Find the optimal work split
     optimal = split_solver.get_optimal_split(scores, n_workers)
 
     # Match invoices with work splits
-    matching_invoices = match_invoices(batches, optimal, names)
+    matching_invoices = match_invoices(batches, optimal)
+
+    random.shuffle(names)
+    matching_invoices = {
+        name: invoices for name, invoices in zip(names, matching_invoices.values())
+    }
 
     # Generate output for the .xlsx report
     return gen_output(table, matching_invoices)
