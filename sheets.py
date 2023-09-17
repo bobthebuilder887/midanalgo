@@ -71,6 +71,7 @@ _ID = -1
 
 
 def _gen_id() -> int:
+    """Helper function to assign unique IDs to batches"""
     global _ID
     _ID += 1
     return _ID
@@ -101,7 +102,7 @@ def gen_batches(table: pd.DataFrame) -> dict[int, Batch]:
 
     # Rename and filter columns so it is easier to work with
     table.columns = list(name.lower().replace(" ", "_") for name in table.columns)
-    table = table[["mod", "score", "invoice_number"]]
+    table = table[["mod", "score", "invoice_number"]]  # type: ignore
 
     @dataclass
     class Row:
