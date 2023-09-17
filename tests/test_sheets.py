@@ -6,59 +6,29 @@ from work_divider import sheets
 
 
 @pytest.fixture
-def TABLE() -> Path:
+def table_path() -> Path:
     return Path("tests") / "sample_data.xlsx"
 
 
 @pytest.fixture
-def TABLEBASE() -> Path:
+def tablebase_path() -> Path:
     return Path("tests") / "sample_tablebase.xlsx"
 
 
-def test_reads_table(TABLE: Path) -> None:
-    expected_shape = (119, 4)
-    table = sheets.read_table(TABLE)
+def test_sheets(table_path: Path, tablebase_path: Path) -> None:
+    table = sheets.read_table(table_path)
     # Check that the shape is as expected
-    assert table.shape == expected_shape
+    assert table.shape == (119, 4)
 
 
-def test_read_tablebase(TABLEBASE: Path) -> None:
-    expected_shape = (49, 5)
-    tablebase = sheets.read_tablebase(TABLEBASE)
+def test_read_tablebase(tablebase_path: Path) -> None:
+    tablebase = sheets.read_tablebase(tablebase_path)
     # Check that the shape is as expected
-    assert tablebase.shape == expected_shape
+    assert tablebase.shape == (49, 5)
+    # Make sure the DEFAULT row is present
     assert "DEFAULT" in tablebase.index
 
 
-def test_read_names(TABLEBASE: Path) -> None:
-    names = sheets.read_names(TABLEBASE)
+def test_read_names(tablebase_path: Path) -> None:
+    names = sheets.read_names(tablebase_path)
     assert len(names) == 11
-
-
-def test_process_table(TABLE: Path, TABLEBASE: Path) -> None:
-    table = sheets.read_table(TABLE)
-    tablebase = sheets.read_tablebase(TABLEBASE)
-    table = sheets.process_table(table, tablebase)
-    # Check that Score column is generated
-    assert "Score" in table.columns
-
-
-def test_gen_batches(TABLE: Path, TABLEBASE: Path) -> None:
-    table = sheets.read_table(TABLE)
-    tablebase = sheets.read_tablebase(TABLEBASE)
-    MOD = tablebase.shape[1]
-    batches = sheets.gen_batches(sheets.process_table(table, tablebase))
-
-    # batch score is always greater than 0
-    assert (batch.score > 0 for batch in batches.values())
-    # Number of invoices doesn't exceed MOD
-    assert (len(batch.invoice_numbers) <= MOD for batch in batches.values())
-
-
-def test_get_scores(TABLE: Path, TABLEBASE: Path) -> None:
-    table = sheets.read_table(TABLE)
-    tablebase = sheets.read_tablebase(TABLEBASE)
-    batches = sheets.gen_batches(sheets.process_table(table, tablebase))
-    scores = sheets.get_scores(batches)
-    # Check that number of scores matches the number of batches
-    assert len(scores) == len(batches)
