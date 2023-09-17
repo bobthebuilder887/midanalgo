@@ -54,14 +54,20 @@ def process_table(table: pd.DataFrame, tablebase: pd.DataFrame) -> pd.DataFrame:
     table["Mod"] = table["Count"].mod(MOD)
     # Add task score
 
+    missing_names: set[str] = set()
+
     def find_score(row: pd.Series, tablebase: pd.DataFrame) -> int:
         if row["Name"] in tablebase.index:
             return tablebase.loc[row["Name"], row["Mod"]]
         else:
-            logging.warning(f"Name {row['Name']} not found! Using DEFAULT row")
+            missing_names.add(row["Name"])
             return tablebase.loc["DEFAULT", row["Mod"]]
 
     table["Score"] = table.apply(find_score, axis=1, tablebase=tablebase)
+
+    for name in missing_names:
+        logging.warning(f"Name {name} not found! Using DEFAULT row")
+
     table["Mod"] = table["Mod"].replace(dict(zip(tablebase.columns, range(MOD))))
 
     return table
