@@ -4,8 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 
-import sheets
-import split_solver
+from work_divider import sheets, split_solver
 
 
 def read_data(
