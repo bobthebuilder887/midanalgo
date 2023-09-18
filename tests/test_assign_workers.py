@@ -1,14 +1,29 @@
 import os
+import random
 from pathlib import Path
+
+import pytest
 
 from work_divider import assign_workers
 
 
-def test_main(table_path: Path, tablebase_path: Path, capsys) -> None:
+def test_main(
+    table_path: Path,
+    tablebase_path: Path,
+    capsys: pytest.CaptureFixture,
+) -> None:
+    random.seed(123)  # Seed for consistent output
     output_path = "tests/output.xlsx"
 
     assign_workers.main(
-        argv=["-t", str(table_path), "-b", str(tablebase_path), "-o", output_path],
+        argv=[
+            "-t",
+            str(table_path),
+            "-b",
+            str(tablebase_path),
+            "-o",
+            output_path,
+        ],
     )
 
     # Test if prints correct statement
