@@ -6,6 +6,13 @@ import pytest
 from work_divider import assign_workers
 
 
+@pytest.fixture(autouse=True)
+def clean_dir(output_path: Path):
+    yield
+    if output_path.exists():
+        os.remove(output_path)
+
+
 def test_assing_names() -> None:
     mock_names = ["A", "B", "C"]
     mock_invoices = {i: [1, 2, 3] for i in range(len(mock_names))}
@@ -76,4 +83,3 @@ def test_generate_worksheet(
 
     # TODO: make sure it always tries to delete a file after the fact
     # Remove file
-    os.remove(output_path)

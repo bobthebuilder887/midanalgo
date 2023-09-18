@@ -1,10 +1,9 @@
-import os
 import random
 from pathlib import Path
 
 import pytest
 
-from work_divider import divide_work_cli
+from work_divider import assign_workers
 
 
 def test_main(
@@ -15,7 +14,7 @@ def test_main(
     random.seed(123)  # Seed for consistent output
     output_path = "tests/output.xlsx"
 
-    divide_work_cli.main(
+    assign_workers.main(
         argv=[
             "-t",
             str(table_path),
@@ -31,5 +30,3 @@ def test_main(
 
     # Test if generates file
     assert Path(output_path).exists()
-
-    os.remove(output_path)

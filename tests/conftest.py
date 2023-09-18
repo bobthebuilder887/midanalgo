@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pytest
@@ -26,3 +27,10 @@ def A() -> list[int]:
 @pytest.fixture
 def N() -> int:
     return 3
+
+
+@pytest.fixture(autouse=True)
+def clean_dir(output_path: Path):
+    yield
+    if output_path.exists():
+        os.remove(output_path)
