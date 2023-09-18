@@ -1,6 +1,7 @@
 import argparse
 import random
 from pathlib import Path
+from typing import Sequence
 
 import pandas as pd
 
@@ -49,6 +50,13 @@ def gen_output(
     return output
 
 
+def assign_names(
+    matching_invoices: dict[int, list[int]],
+    names: list[str],
+) -> dict[str, list[int]]:
+    return {name: invoices for name, invoices in zip(names, matching_invoices.values())}
+
+
 def gen_work_division_table(
     names: list[str],
     table: pd.DataFrame,
@@ -57,8 +65,12 @@ def gen_work_division_table(
     # Get number of workers
     n_workers = len(names)
 
+    # Randomize name order for random name assignment
+    random.shuffle(names)
+
     # Assign work score to each invoice and batch by type
     batches = batching.gen_batches(batching.process_table(table, tablebase))
+
     # Get batch scores
     scores = batching.get_scores(batches)
 
@@ -68,11 +80,8 @@ def gen_work_division_table(
     # Match invoices with work splits
     matching_invoices = match_invoices(batches, optimal)
 
-    # Assign names randomly
-    random.shuffle(names)
-    matching_invoices = {
-        name: invoices for name, invoices in zip(names, matching_invoices.values())
-    }
+    # Assign names
+    matching_invoices = assign_names(matching_invoices, names)
 
     # Generate output for the .xlsx report
     return gen_output(table, matching_invoices)
@@ -95,7 +104,7 @@ def generate_work_sheet(
     print(f"File saved to {output_path}")
 
 
-def main(argv: list[str] | None = None) -> None:
+def main(argv: Sequence[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
         prog="Midan's Sheet Processor",
         description="Process work table",
