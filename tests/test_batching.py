@@ -45,6 +45,15 @@ def test_gen_batches(
     # Generate batches
     batches = batching.gen_batches(processed_table)
 
+    # Get invoice numbers
+    # Get batched invoice numbers
+    invoice_numbers: list[int] = []
+    for batch in batches.values():
+        invoice_numbers.extend(batch.invoice_numbers)
+
+    # Make sure invoice numbers match invoice number column
+    assert set(processed_table["invoice_number"].unique()) == set(invoice_numbers)
+
     # Make sure every batch has a unique id
     assert len(batches) == len(set(batches))
 
