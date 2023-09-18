@@ -26,6 +26,14 @@ def match_invoices(
     return invoice_per_worker
 
 
+def assign_names(
+    matching_invoices: dict[int, list[int]],
+    names: list[str],
+) -> dict[str, list[int]]:
+    """Assign names to invoice batches"""
+    return {name: invoices for name, invoices in zip(names, matching_invoices.values())}
+
+
 def gen_output(
     table: pd.DataFrame,
     matching_invoices: dict[str, list[int]],
@@ -48,18 +56,14 @@ def gen_output(
     return output
 
 
-def assign_names(
-    matching_invoices: dict[int, list[int]],
-    names: list[str],
-) -> dict[str, list[int]]:
-    return {name: invoices for name, invoices in zip(names, matching_invoices.values())}
+def generate_work_sheet(
+    data_path: Path | str,
+    tablebase_path: Path | str,
+    output_path: Path | str = "output.xlsx",
+) -> None:
+    # Read .xlsx data
+    table, tablebase, names = sheets.read_data(data_path, tablebase_path)
 
-
-def gen_work_division_table(
-    names: list[str],
-    table: pd.DataFrame,
-    tablebase: pd.DataFrame,
-) -> pd.Series:
     # Get number of workers
     n_workers = len(names)
 
@@ -82,21 +86,13 @@ def gen_work_division_table(
     matching_invoices = assign_names(matching_invoices, names)
 
     # Generate output for the .xlsx report
-    return gen_output(table, matching_invoices)
+    output = gen_output(table, matching_invoices)
 
+    # Save to .xlsx
+    output.to_excel(output_path)
 
-def save_output(output: pd.Series, path: str | Path) -> None:
-    output.to_excel(path)
+    # TODO: add formatting of .xlsx
+    # ...
 
-
-def generate_work_sheet(
-    data_path: Path | str,
-    tablebase_path: Path | str,
-    output_path: Path | str = "output.xlsx",
-) -> None:
-    """Divide invoces among workers evenly and generate an excel sheet"""
-    table, tablebase, names = sheets.read_data(data_path, tablebase_path)
-    output = gen_work_division_table(names, table, tablebase)
-    # Save to a specified excel file
-    save_output(output, output_path)
+    # Print a confirmation message
     print(f"File saved to {output_path}")
