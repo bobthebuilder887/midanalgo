@@ -91,7 +91,10 @@ def gen_batches(table: pd.DataFrame) -> dict[int, Batch]:
             batch = Batch()
             batches[batch.id] = batch
 
-        batches[batch.id].add_invoice(row.score, row.invoice_number)
+        batches[batch.id].add_invoice(
+            score=row.score,
+            invoice_number=row.invoice_number,
+        )
 
         previous_mod = row.mod
 
