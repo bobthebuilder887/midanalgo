@@ -9,4 +9,4 @@ description="Divide work among co-workers using Midan's scoring system"
 dependencies=['openpyxl==3.0.10', 'pandas==2.1.0', 'numberpartitioning==0.0.2']
 
 [project.scripts]
-divide_work = 'work_divider.assign_workers:main'
+divide_work = 'work_divider.divide_work_cli:main'

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from work_divider import assign_workers
+from work_divider import divide_work_cli
 
 
 def test_main(
@@ -15,7 +15,7 @@ def test_main(
     random.seed(123)  # Seed for consistent output
     output_path = "tests/output.xlsx"
 
-    assign_workers.main(
+    divide_work_cli.main(
         argv=[
             "-t",
             str(table_path),

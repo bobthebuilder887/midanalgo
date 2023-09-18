@@ -1,7 +1,5 @@
-import argparse
 import random
 from pathlib import Path
-from typing import Sequence
 
 import pandas as pd
 
@@ -102,46 +100,3 @@ def generate_work_sheet(
     # Save to a specified excel file
     save_output(output, output_path)
     print(f"File saved to {output_path}")
-
-
-def main(argv: Sequence[str] | None = None) -> None:
-    parser = argparse.ArgumentParser(
-        prog="Midan's Sheet Processor",
-        description="Process work table",
-        epilog="All files have to be of .xlsx type",
-    )
-
-    # Table file path
-    parser.add_argument(
-        "-t",
-        "--table",
-        help="Path to table file.",
-        type=str,
-        required=True,
-    )
-    # Base Table file path
-    parser.add_argument(
-        "-b",
-        "--table-base",
-        help="Path to table base file.",
-        type=str,
-        required=True,
-    )
-    # Output Table file path
-    parser.add_argument(
-        "-o",
-        "--output-file",
-        help="Path to output file.",
-        type=str,
-        default="output.xlsx",
-        required=False,
-    )
-
-    # Parse arguments
-    args = parser.parse_args(argv)
-
-    generate_work_sheet(args.table, args.table_base, args.output_file)
-
-
-if __name__ == "__main__":
-    main()
