@@ -41,7 +41,3 @@ def main(argv: Sequence[str] | None = None) -> None:
     args = parser.parse_args(argv)
 
     generate_work_sheet(args.table, args.table_base, args.output_file)
-
-
-if __name__ == "__main__":
-    main()

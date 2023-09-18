@@ -45,7 +45,6 @@ def test_gen_batches(
     # Generate batches
     batches = batching.gen_batches(processed_table)
 
-    # Get invoice numbers
     # Get batched invoice numbers
     invoice_numbers: list[int] = []
     for batch in batches.values():
