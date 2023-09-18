@@ -1,5 +1,5 @@
 import argparse
-from collections.abc import Sequence
+from typing import Sequence
 
 from work_divider.assign_workers import generate_work_sheet
 
