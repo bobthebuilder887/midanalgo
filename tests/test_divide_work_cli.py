@@ -9,10 +9,10 @@ from work_divider import divide_work_cli
 def test_main(
     table_path: Path,
     tablebase_path: Path,
+    output_path: Path,
     capsys: pytest.CaptureFixture,
 ) -> None:
     random.seed(123)  # Seed for consistent output
-    output_path = "tests/output.xlsx"
 
     divide_work_cli.main(
         argv=[
