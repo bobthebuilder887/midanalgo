@@ -34,14 +34,27 @@ def test_match_invoices() -> None:
         batch_e.id: batch_e,
     }
 
-    # TODO: add a check which makes sure all invoice numbers are assigned to workers
-    # invoice_numbers: list[int] = []
-    # for batch in mock_batches.values():
-    #     invoice_numbers.extend(batch.invoice_numbers)
+    # Get batched invoice numbers
+    invoice_numbers: list[int] = []
+    for batch in mock_batches.values():
+        invoice_numbers.extend(batch.invoice_numbers)
 
     matching_invoices = assign_workers.match_invoices(mock_batches, optimal_split)
 
+    # Make sure all of batches have been emptied out
+    assert mock_batches == {}
+
+    # Make sure invoice numbers are assigned per worker
     assert len(matching_invoices) == len(optimal_split)
+
+    # Get matched invoice numbers
+    matched_invoice_numbers: list[int] = []
+    for invoice_split in matching_invoices.values():
+        matched_invoice_numbers.extend(invoice_split)
+
+    # Make sure all invoice numbers are assigned to workers
+    assert len(invoice_numbers) == len(matched_invoice_numbers)
+    assert set(invoice_numbers) == set(matched_invoice_numbers)
 
 
 def test_generate_worksheet(

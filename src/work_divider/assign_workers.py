@@ -16,7 +16,7 @@ def match_invoices(
     invoice_per_worker = {i: [] for i in range(len(optimal))}
 
     # Match invoices using batch scores
-    for i, scores in invoice_per_worker.items():
+    for i, scores in enumerate(optimal):
         for score in scores:
             # Find a invoice batch that matches the score (deletes batch, once found)
             batches, invoices = batching.find_matching_invoices(score, batches)
