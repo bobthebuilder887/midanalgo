@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import pandas as pd
 import pytest
 
 from work_divider import assign_workers
@@ -70,8 +71,7 @@ def test_generate_worksheet(
     # Test if generates file
     assert Path(output_path).exists()
 
-    # TODO: add tests to make sure file is correctly generated
-    # pd.read_excel(output_path)
+    output = pd.read_excel(output_path)
 
-    # TODO: make sure it always tries to delete a file after the fact
-    # Remove file
+    # Make sure there is a Worker column and every worker name is assigned
+    assert output["Worker"].dropna().unique().shape[0] == 11
