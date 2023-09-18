@@ -61,6 +61,10 @@ def generate_work_sheet(
     tablebase_path: Path | str,
     output_path: Path | str = "output.xlsx",
 ) -> None:
+    # Force Path type for output
+    if isinstance(output_path, str):
+        data_path = Path(output_path)
+
     # Read .xlsx data
     table, tablebase, names = sheets.read_data(data_path, tablebase_path)
 
