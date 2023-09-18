@@ -6,6 +6,10 @@ import pandas as pd
 
 def read_table(file_path: str | Path) -> pd.DataFrame:
     """Read the invoice table"""
+
+    if isinstance(file_path, str):
+        file_path = Path(file_path)
+
     return pd.read_excel(
         file_path,
         header=11,
@@ -15,6 +19,9 @@ def read_table(file_path: str | Path) -> pd.DataFrame:
 
 def read_tablebase(file_path: str | Path) -> pd.DataFrame:
     """Read the tablebase table"""
+
+    if isinstance(file_path, str):
+        file_path = Path(file_path)
 
     DEFAULT_SCORES = 12, 6, 4, 4, 2
 
@@ -29,6 +36,10 @@ def read_tablebase(file_path: str | Path) -> pd.DataFrame:
 
 def read_names(file_path: str | Path, sheet_name="Workers") -> list[str]:
     """Read the worker names"""
+
+    if isinstance(file_path, str):
+        file_path = Path(file_path)
+
     df = pd.read_excel(file_path, sheet_name=sheet_name)
     return list(df["Agent"].values)
 

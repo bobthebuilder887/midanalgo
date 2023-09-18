@@ -37,8 +37,14 @@ def process_table(table: pd.DataFrame, tablebase: pd.DataFrame) -> pd.DataFrame:
     table["Score"] = table.apply(find_score, axis=1, tablebase=tablebase)
 
     # Log message for missing name scores
-    for name in missing_names:
-        logging.warning(f"Name {name} not found! Using DEFAULT row")
+    if missing_names:
+        msgs = []
+        msgs.append("Following names using DEFAULT row from tablebase: ")
+        for name in missing_names:
+            score_values = table.loc[table["Name"] == name, "Score"].values
+            score_values = ", ".join([str(int(score)) for score in score_values])
+            msgs.append(f"\t- {name} (added score(s): {score_values})")
+        logging.warning("\n".join(msgs))
 
     table["Mod"] = table["Mod"].replace(dict(zip(tablebase.columns, range(MOD))))
 
