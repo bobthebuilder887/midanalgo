@@ -14,6 +14,11 @@ def tablebase_path() -> Path:
 
 
 @pytest.fixture
+def output_path() -> Path:
+    return Path("tests") / "output.xlsx"
+
+
+@pytest.fixture
 def A() -> list[int]:
     return [1, 2, 3, 4, 5]
 
