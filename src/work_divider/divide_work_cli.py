@@ -31,7 +31,7 @@ def main(argv: Sequence[str] | None = None) -> None:
     parser.add_argument(
         "-o",
         "--output-file",
-        help="Path to output file.",
+        help="Path to output file. (Default: output.xlsx)",
         type=str,
         default="output.xlsx",
         required=False,
