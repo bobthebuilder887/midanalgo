@@ -6,14 +6,14 @@ import pytest
 from work_divider import batching
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def table() -> pd.DataFrame:
     from work_divider import sheets
 
     return sheets.read_table("tests/sample_data.xlsx")
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def tablebase() -> pd.DataFrame:
     from work_divider import sheets
 

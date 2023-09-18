@@ -31,3 +31,14 @@ def read_names(file_path: str | Path, sheet_name="Workers") -> list[str]:
     """Read the worker names"""
     df = pd.read_excel(file_path, sheet_name=sheet_name)
     return list(df["Agent"].values)
+
+
+def read_data(
+    table_path: Path | str,
+    tablebase_path: Path | str,
+) -> tuple[pd.DataFrame, pd.DataFrame, list[str]]:
+    """Read all required data from files"""
+    table = read_table(table_path)
+    tablebase = read_tablebase(tablebase_path)
+    names = read_names(tablebase_path)
+    return table, tablebase, names

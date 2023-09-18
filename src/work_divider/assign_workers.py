@@ -7,17 +7,6 @@ import pandas as pd
 from work_divider import batching, sheets, split_solver
 
 
-def read_data(
-    table_path: Path | str,
-    tablebase_path: Path | str,
-) -> tuple[pd.DataFrame, pd.DataFrame, list[str]]:
-    """Read all required data from files"""
-    table = sheets.read_table(table_path)
-    tablebase = sheets.read_tablebase(tablebase_path)
-    names = sheets.read_names(tablebase_path)
-    return table, tablebase, names
-
-
 def match_invoices(
     batches: dict[int, batching.Batch],
     optimal: list[list[int]],
@@ -79,6 +68,7 @@ def gen_work_division_table(
     # Match invoices with work splits
     matching_invoices = match_invoices(batches, optimal)
 
+    # Assign names randomly
     random.shuffle(names)
     matching_invoices = {
         name: invoices for name, invoices in zip(names, matching_invoices.values())
@@ -98,7 +88,7 @@ def generate_work_sheet(
     output_path: Path | str = "output.xlsx",
 ) -> None:
     """Divide invoces among workers evenly and generate an excel sheet"""
-    table, tablebase, names = read_data(data_path, tablebase_path)
+    table, tablebase, names = sheets.read_data(data_path, tablebase_path)
     output = gen_work_division_table(names, table, tablebase)
     # Save to a specified excel file
     save_output(output, output_path)
