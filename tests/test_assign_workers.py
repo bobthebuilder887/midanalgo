@@ -1,16 +1,8 @@
-import os
 from pathlib import Path
 
 import pytest
 
 from work_divider import assign_workers
-
-
-@pytest.fixture(autouse=True)
-def clean_dir(output_path: Path):
-    yield
-    if output_path.exists():
-        os.remove(output_path)
 
 
 def test_assing_names() -> None:
