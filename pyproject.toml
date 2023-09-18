@@ -6,7 +6,10 @@ build-backend = "setuptools.build_meta"
 name='work_divider'
 version='0.1.0'
 description="Divide work among co-workers using Midan's scoring system"
-dependencies=['openpyxl==3.0.10', 'pandas==2.1.0', 'numberpartitioning==0.0.2']
+dependencies=['openpyxl>=3.0.10', 'pandas>=2.1.0', 'numberpartitioning>=0.0.2']
+
+[project.optional-dependencies]
+dev = ['pytest', 'pytest-cov', "black", "flake8", "mypy"]
 
 [project.scripts]
 divide_work = 'work_divider.divide_work_cli:main'
