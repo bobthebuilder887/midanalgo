@@ -1,4 +1,5 @@
 # Midan's Sheet Algo
+![Tests](https://github.com/bobthebuilder887/midanalgo/actions/workflows/main.yml/badge.svg?event=push)
 
 ## Setup
 In your environment (e.g. Anaconda or virtualenv):
