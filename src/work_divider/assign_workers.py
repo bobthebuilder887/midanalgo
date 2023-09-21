@@ -56,6 +56,17 @@ def gen_output(
     return output
 
 
+def save_and_format_to_xlsx(output: pd.Series, output_path: Path) -> None:
+    # Create a Pandas Excel writer using XlsxWriter as the engine.
+    with pd.ExcelWriter(output_path, engine="xlsxwriter") as writer:
+        # Convert the dataframe to an XlsxWriter Excel object.
+        output.to_excel(writer, sheet_name="Sheet1")
+        # Get the xlsxwriter worksheet objects.
+        worksheet = writer.sheets["Sheet1"]
+        # Automatically set the column width
+        worksheet.autofit()
+
+
 def generate_work_sheet(
     data_path: Path | str,
     tablebase_path: Path | str,
@@ -92,11 +103,8 @@ def generate_work_sheet(
     # Generate output for the .xlsx report
     output = gen_output(table, invoices_by_name)
 
-    # Save to .xlsx
-    output.to_excel(output_path)
-
-    # TODO: add formatting of .xlsx
-    # ...
+    # Save and format the output to an .xlsx file
+    save_and_format_to_xlsx(output, output_path)
 
     # Print a confirmation message
     print(f"File saved to {output_path}")
