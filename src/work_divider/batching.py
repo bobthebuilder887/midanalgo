@@ -27,11 +27,11 @@ def process_table(table: pd.DataFrame, tablebase: pd.DataFrame) -> pd.DataFrame:
 
     def find_score(row: pd.Series, tablebase: pd.DataFrame) -> int:
         if row["Name"] in tablebase.index:
-            return tablebase.loc[row["Name"], row["Mod"]]
+            return tablebase.loc[row["Name"], row["Mod"]]  # type: ignore
         else:
             # If missing add to a set for log message
             missing_names.add(row["Name"])  # type: ignore
-            return tablebase.loc["DEFAULT", row["Mod"]]
+            return tablebase.loc["DEFAULT", row["Mod"]]  # type: ignore
 
     # Add task score
     table["Score"] = table.apply(find_score, axis=1, tablebase=tablebase)
@@ -46,6 +46,9 @@ def process_table(table: pd.DataFrame, tablebase: pd.DataFrame) -> pd.DataFrame:
             msgs.append(f"\t- {name} (added score(s): {score_values})")
         logging.warning("\n".join(msgs))
 
+    # Change from to modulo of the number of columns in tablebase
+    # i.e. from 1, 2, 3, 4, 0 to  0, 1, 2, 3, 4
+    # This makes for simpler batch generation
     table["Mod"] = table["Mod"].replace(dict(zip(tablebase.columns, range(MOD))))
 
     # Rename and filter columns so it is easier to work with
