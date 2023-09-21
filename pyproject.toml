@@ -18,6 +18,7 @@ dev = [
         "Flake8-pyproject", 
         "mypy", 
         "tox", 
+        "tox-gh-actions",
         "isort"
         ]
 test = [
