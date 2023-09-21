@@ -2,10 +2,34 @@
 name = 'work_divider'
 version = '0.1.0'
 description = "Divide work among co-workers using Midan's scoring system"
-dependencies = ['openpyxl>=3.0.10', 'pandas>=2.1.0', 'numberpartitioning>=0.0.2']
+dependencies = [
+                'openpyxl>=3.0.10', 
+                'XlsxWriter>=3.1.4',
+                'pandas>=2.1.0', 
+                'numberpartitioning>=0.0.2'
+                ]
 
 [project.optional-dependencies]
-dev = ['pytest', 'pytest-cov', "black", "flake8", "mypy"]
+dev = [
+        "pytest", 
+        "pytest-cov",
+        "black", 
+        "flake8", 
+        "Flake8-pyproject", 
+        "mypy", 
+        "tox", 
+        "isort"
+        ]
+test = [
+        "pytest", 
+        "pytest-cov",
+        ]
+lint = [
+        "mypy", 
+        "black", 
+        "isort",
+        "flake8", 
+        ]
 
 [project.scripts]
 divide_work = 'work_divider.divide_work_cli:main'
@@ -13,3 +37,17 @@ divide_work = 'work_divider.divide_work_cli:main'
 [build-system]
 requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
+
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.flake8]
+max-line-length = 100
