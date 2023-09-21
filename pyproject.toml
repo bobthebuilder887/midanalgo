@@ -29,6 +29,7 @@ lint = [
         "black", 
         "isort",
         "flake8", 
+        "Flake8-pyproject", 
         ]
 
 [project.scripts]
