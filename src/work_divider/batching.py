@@ -46,9 +46,9 @@ def process_table(table: pd.DataFrame, tablebase: pd.DataFrame) -> pd.DataFrame:
             msgs.append(f"\t- {name} (added score(s): {score_values})")
         logging.warning("\n".join(msgs))
 
-    # Change from to modulo of the number of columns in tablebase
-    # i.e. from 1, 2, 3, 4, 0 to  0, 1, 2, 3, 4
-    # This makes for simpler batch generation
+    # Change from modulo to the ocurrence number in the table
+    # i.e. if it is 5 items in a row max then 1, 2, 3, 4, 0 becomes 0, 1, 2, 3, 4
+    # This makes for simpler batch generation (see gen batches)
     table["Mod"] = table["Mod"].replace(dict(zip(tablebase.columns, range(MOD))))
 
     # Rename and filter columns so it is easier to work with
