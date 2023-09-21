@@ -5,10 +5,17 @@
 In your environment (e.g. Anaconda or virtualenv):
 
 ```{code-block} bash
-pip install -e .
+git clone https://github.com/bobthebuilder887/midanalgo
+cd midanalgo
+python -m pip install .
 ```
 
 ## Run
 ```{code-block} bash
 divide_work -t tests/sample_data.xlsx -b tests/sample_tablebase.xlsx -o output.xlsx
+```
+
+## Dev-mode
+```{code-block} bash
+python -m pip install -e '.[dev]'
 ```
