@@ -13,7 +13,7 @@ def match_invoices(
     """Match scores with corresponding invoice numbers"""
 
     # Initialize a dictionary of workers to store invoice numbers
-    invoice_per_worker = {i: [] for i in range(len(optimal))}
+    invoice_per_worker: dict[int, list[int]] = {i: [] for i in range(len(optimal))}
 
     # Match invoices using batch scores
     for i, scores in enumerate(optimal):
@@ -83,14 +83,14 @@ def generate_work_sheet(
     # Find the optimal work split
     optimal = split_solver.get_optimal_split(scores, n_workers)
 
-    # Match invoices with work splits
-    matching_invoices = match_invoices(batches, optimal)
+    # Match invoices with work splits (finds a list of invoices for each work score)
+    invoices_by_split = match_invoices(batches, optimal)
 
-    # Assign names
-    matching_invoices = assign_names(matching_invoices, names)
+    # Match invoice lists with worker names
+    invoices_by_name = assign_names(invoices_by_split, names)
 
     # Generate output for the .xlsx report
-    output = gen_output(table, matching_invoices)
+    output = gen_output(table, invoices_by_name)
 
     # Save to .xlsx
     output.to_excel(output_path)
