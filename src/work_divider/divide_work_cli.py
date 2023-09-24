@@ -1,7 +1,7 @@
 import argparse
+from pathlib import Path
 from typing import Sequence
 
-from pathlib import Path
 from work_divider.assign_workers import generate_work_sheet
 
 
