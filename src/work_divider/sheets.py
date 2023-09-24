@@ -40,8 +40,10 @@ def read_tablebase(file_path: str | Path) -> pd.DataFrame:
 
     tablebase = pd.read_excel(file_path, header=2, usecols="B:G", index_col=0)
 
-    # if "Name" not in tablebase.:
-    #     ...
+    if tablebase.index.name != "Payor Name":
+        raise IncorrectTableFormat(
+            f"Index name not 'Payor Name' in {file_path}. Please specify a valid tablebase!"
+        )
 
     # Make sure column names are just their number
     tablebase.columns = list(range(tablebase.shape[1]))
