@@ -143,7 +143,8 @@ class GUI:
             anchor=tkr.CENTER,
         )
 
-        self.set_output_widgets()
+        if self.output_path.exists():
+            self.set_output_widgets()
 
         self.root.mainloop()
 
