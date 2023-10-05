@@ -1,7 +1,7 @@
-import logging
 from pathlib import Path
 
 import pandas as pd
+from work_divider.sheet_logs import SHEET_LOG
 
 
 class IncorrectTableFormat(Exception):
@@ -51,7 +51,7 @@ def read_tablebase(file_path: str | Path) -> pd.DataFrame:
     # Make sure there exists a DEFAULT row
     if "DEFAULT" not in tablebase.index:
         tablebase.loc["DEFAULT", :] = DEFAULT_SCORES  # type: ignore
-        logging.warning(f"Added DEFAULT row {DEFAULT_SCORES=} to tablebase")
+        SHEET_LOG.warning(f"Added DEFAULT row {DEFAULT_SCORES=} to tablebase")
 
     return tablebase
 

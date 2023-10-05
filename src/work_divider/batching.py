@@ -1,7 +1,7 @@
-import logging
 from dataclasses import dataclass, field
 
 import pandas as pd
+from work_divider.sheet_logs import SHEET_LOG
 
 
 def process_table(table: pd.DataFrame, tablebase: pd.DataFrame) -> pd.DataFrame:
@@ -44,7 +44,7 @@ def process_table(table: pd.DataFrame, tablebase: pd.DataFrame) -> pd.DataFrame:
             score_values = table.loc[table["Name"] == name, "Score"].values
             score_values = ", ".join([str(int(score)) for score in score_values])
             msgs.append(f"\t- {name} (added score(s): {score_values})")
-        logging.warning("\n".join(msgs))
+        SHEET_LOG.warning("\n".join(msgs))
 
     # Change from modulo to the ocurrence number in the table
     # i.e. if it is 5 items in a row max then 1, 2, 3, 4, 0 becomes 0, 1, 2, 3, 4

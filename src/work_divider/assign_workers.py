@@ -4,6 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 from work_divider import batching, sheets, split_solver
+from work_divider.sheet_logs import SHEET_LOG
 
 
 def match_invoices(
@@ -76,35 +77,44 @@ def generate_work_sheet(
     if isinstance(output_path, str):
         output_path = Path(output_path)
 
-    # Read .xlsx data
-    table, tablebase, names = sheets.read_data(data_path, tablebase_path)
+    SHEET_LOG.info(f"Generating work sheet for {output_path.absolute()}")
 
-    # Get number of workers
-    n_workers = len(names)
+    SHEET_LOG.debug(f"{data_path=}")
+    SHEET_LOG.debug(f"{tablebase_path=}")
 
-    # Randomize name order for random name assignment
-    random.shuffle(names)
+    try:
+        # Read .xlsx data
+        table, tablebase, names = sheets.read_data(data_path, tablebase_path)
 
-    # Assign work score to each invoice and batch by type
-    batches = batching.gen_batches(batching.process_table(table, tablebase))
+        # Get number of workers
+        n_workers = len(names)
 
-    # Get batch scores
-    scores = batching.get_scores(batches)
+        # Randomize name order for random name assignment
+        random.shuffle(names)
 
-    # Find the optimal work split
-    optimal = split_solver.get_optimal_split(scores, n_workers)
+        # Assign work score to each invoice and batch by type
+        batches = batching.gen_batches(batching.process_table(table, tablebase))
 
-    # Match invoices with work splits (finds a list of invoices for each work score)
-    invoices_by_split = match_invoices(batches, optimal)
+        # Get batch scores
+        scores = batching.get_scores(batches)
 
-    # Match invoice lists with worker names
-    invoices_by_name = assign_names(invoices_by_split, names)
+        # Find the optimal work split
+        optimal = split_solver.get_optimal_split(scores, n_workers)
 
-    # Generate output for the .xlsx report
-    output = gen_output(table, invoices_by_name)
+        # Match invoices with work splits (finds a list of invoices for each work score)
+        invoices_by_split = match_invoices(batches, optimal)
 
-    # Save and format the output to an .xlsx file
-    save_and_format_to_xlsx(output, output_path)
+        # Match invoice lists with worker names
+        invoices_by_name = assign_names(invoices_by_split, names)
 
-    # Print a confirmation message
-    print(f"File saved to {output_path}")
+        # Generate output for the .xlsx report
+        output = gen_output(table, invoices_by_name)
+
+        # Save and format the output to an .xlsx file
+        save_and_format_to_xlsx(output, output_path)
+
+        # Print a confirmation message
+        print(f"File saved to {output_path}")
+    except Exception:
+        SHEET_LOG.error("Error caught during work sheet generation", exc_info=True)
+        raise
