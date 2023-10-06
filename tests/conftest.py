@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import pytest
+from work_divider.sheet_logs import SHEET_LOG
 
 
 @pytest.fixture
@@ -29,8 +30,16 @@ def N() -> int:
     return 3
 
 
+@pytest.fixture
+def log_path() -> Path:
+    return Path(SHEET_LOG.handlers[0].baseFilename)  # type: ignore
+
+
 @pytest.fixture(autouse=True)
-def clean_dir(output_path: Path):
+def clean_dir(output_path: Path, log_path: Path):
     yield
     if output_path.exists():
         os.remove(output_path)
+
+    if log_path.exists():
+        os.remove(log_path)
