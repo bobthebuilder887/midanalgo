@@ -75,3 +75,7 @@ def test_generate_worksheet(
 
     # Make sure there is a Worker column and every worker name is assigned
     assert output["Worker"].dropna().unique().shape[0] == 11
+
+    # Test it raises error
+    with pytest.raises(Exception):
+        assign_workers.generate_work_sheet(table_path, table_path, output_path)
