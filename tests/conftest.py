@@ -36,12 +36,14 @@ def log_path() -> Path:
 
 
 @pytest.fixture(autouse=True)
-def clean_dir(output_path: Path, log_path: Path):
+def cancel_logging():
+    SHEET_LOG.propagate = False
     yield
+
+
+@pytest.fixture(autouse=True)
+def clean_dir(output_path: Path):
+    yield
+
     if output_path.exists():
         os.remove(output_path)
-
-    if log_path.exists():
-        SHEET_LOG.propagate = False
-        os.remove(log_path)
-        # SHET_LOG.propagate = True
