@@ -90,12 +90,12 @@ def test_existing_file_yes(
     assert Path(output_path).exists()
 
     # Save creation time
-    ctime1 = os.path.getctime(output_path)
+    ctime1 = os.path.getmtime(output_path)
 
     divide_work_cli.main(argv=input)
 
     # Save creation time
-    ctime2 = os.path.getctime(output_path)
+    ctime2 = os.path.getmtime(output_path)
 
     # Test if generates file
     assert Path(output_path).exists()
@@ -138,11 +138,11 @@ def test_existing_file_no(
     # Test if generates file the first time
     assert Path(output_path).exists()
 
-    ctime1 = os.path.getctime(output_path)
+    ctime1 = os.path.getmtime(output_path)
 
     divide_work_cli.main(argv=input)
 
-    ctime2 = os.path.getctime(output_path)
+    ctime2 = os.path.getmtime(output_path)
 
     # Test if terminates at (y/n) prompt
     assert capsys.readouterr().out.endswith("Do you want to overwrite it? (y/n)\n")
