@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 
 import pandas as pd
+
 from work_divider.sheet_logs import SHEET_LOG
 
 
