@@ -30,15 +30,17 @@ def N() -> int:
     return 3
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def log_path() -> Path:
     return Path(SHEET_LOG.handlers[0].baseFilename)  # type: ignore
 
 
-@pytest.fixture(autouse=True)
-def cancel_logging():
-    SHEET_LOG.propagate = False
+@pytest.fixture(autouse=True, scope="session")
+def delete_logs(log_path):
+    """Remove log file after tests are done"""
     yield
+    if log_path.exists():
+        os.remove(log_path)
 
 
 @pytest.fixture(autouse=True)
