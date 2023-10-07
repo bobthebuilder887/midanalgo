@@ -4,9 +4,10 @@ import subprocess
 import tkinter as tkr
 from datetime import datetime
 from pathlib import Path
-from tkinter import filedialog as fd, messagebox
-from work_divider.assign_workers import generate_work_sheet
+from tkinter import filedialog as fd
+from tkinter import messagebox
 
+from work_divider.assign_workers import generate_work_sheet
 
 # TODO: it should remember some from the last time app was invoked
 # TODO: add tests

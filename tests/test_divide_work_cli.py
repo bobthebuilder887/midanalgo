@@ -1,10 +1,10 @@
+import os
 import random
+from io import StringIO
 from pathlib import Path
 
 import pytest
 
-import os
-from io import StringIO
 from work_divider import divide_work_cli
 
 
