@@ -40,6 +40,7 @@ def delete_logs(log_path):
     """Remove log file after tests are done"""
     yield
     if log_path.exists():
+        SHEET_LOG.handlers[0].close()
         os.remove(log_path)
 
 
