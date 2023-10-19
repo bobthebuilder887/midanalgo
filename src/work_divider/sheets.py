@@ -6,7 +6,9 @@ from work_divider.sheet_logs import SHEET_LOG
 
 
 class IncorrectTableFormat(Exception):
-    pass
+    def __init__(self, reason: str, file_path: str | Path) -> None:
+        message = f"{reason} not found in {file_path}. Please specify a valid table!"
+        super().__init__(message)
 
 
 def read_table(file_path: str | Path) -> pd.DataFrame:
@@ -24,9 +26,7 @@ def read_table(file_path: str | Path) -> pd.DataFrame:
     )
 
     if any(col not in file.columns for col in expected_cols):
-        raise IncorrectTableFormat(
-            f"Column(s): {expected_cols} not found in {file_path}. Please specifiy a valid table!"
-        )
+        raise IncorrectTableFormat(f"Column(s): {expected_cols}", file_path)
 
     return file
 
@@ -42,9 +42,7 @@ def read_tablebase(file_path: str | Path) -> pd.DataFrame:
     tablebase = pd.read_excel(file_path, header=2, usecols="B:G", index_col=0)
 
     if tablebase.index.name != "Payor Name":
-        raise IncorrectTableFormat(
-            f"Index name not 'Payor Name' in {file_path}. Please specify a valid tablebase!"
-        )
+        raise IncorrectTableFormat("Index name 'Payor Name'", file_path)
 
     # Make sure column names are just their number
     tablebase.columns = list(range(tablebase.shape[1]))
@@ -66,9 +64,7 @@ def read_names(file_path: str | Path, sheet_name="Workers") -> list[str]:
     try:
         df = pd.read_excel(file_path, sheet_name=sheet_name)
     except ValueError:
-        raise IncorrectTableFormat(
-            f"Sheet '{sheet_name}' not found in {file_path}! Please specify a valid tablebase!"
-        )
+        raise IncorrectTableFormat(f"Sheet '{sheet_name}'", file_path)
 
     return list(df["Agent"].values)
 
