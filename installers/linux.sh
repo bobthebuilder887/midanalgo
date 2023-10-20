@@ -3,7 +3,7 @@
 # Check if virtualenv is installed
 if ! command -v virtualenv &> /dev/null
 then
-  echo "virtualenv is not installed, install using brew, pip or pipx"
+  echo "virtualenv is not installed, install using your package manager of choice, pip or pipx"
   exit 1
 fi
 
@@ -20,8 +20,8 @@ pip install --upgrade pip
 pip install .
 
 # Make sure pyinstaller is installed
-
 pip install pyinstaller
+
 # Build
 pyinstaller --onedir --clean --windowed gui.py
 
