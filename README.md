@@ -26,6 +26,14 @@ divide_work -t tests/sample_data.xlsx -b tests/sample_tablebase.xlsx -o output.x
 python gui.py
 ```
 
+### GUI stand-alone build
+
+Inside of project directory:
+
+```{code-block} bash
+chmod +x install_gui.sh && ./install_gui.sh
+```
+
 ## Dev-mode
 
 ```{code-block} bash
